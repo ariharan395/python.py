@@ -1,0 +1,32 @@
+!pip install gensim
+# !pip install nltk
+
+from gensim.models import Word2Vec
+from nltk.tokenize import word_tokenize
+import nltk
+nltk.download('punkt')  # Download the Punkt tokenizer
+
+# Sample sentences
+sentences = [
+    "Rajalakshmi Institute of Technology (An Autonomous Institution) is one of the best engineering colleges in Chennai and is part of Rajalakshmi Institution.",
+    "Rajalakshmi Institute of Technology was established in 2008.",
+    "RIT is accredited with the highest grade of A++ by NAAC. RIT is affiliated with Anna University Chennai.",
+    "It is one of the AICTE-approved colleges in Chennai New Delhi and also offers NBA-approved courses."
+]
+
+# Tokenize the sentences into words
+tokenized_sentences = [word_tokenize(sentence.lower()) for sentence in sentences]
+
+# Set up and train the Word2Vec model
+model = Word2Vec(sentences=tokenized_sentences, vector_size=100, window=5, min_count=1, workers=4)
+
+# Save the trained model to a file
+model.save("word2vec_model_sentences.bin")
+
+# Load the saved model
+loaded_model = Word2Vec.load("word2vec_model_sentences.bin")
+
+# Example of accessing word embeddings
+word_embedding = loaded_model.wv['engineering']
+print("Word embedding for 'engineering':", word_embedding)
+ 
